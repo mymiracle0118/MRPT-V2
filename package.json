@@ -16,7 +16,7 @@
     "test:deploy": "forge test --match-path ./test/MRPTFactoryTest.t.sol -vv",
     "test:deploy_sepolia": "forge test --match-path ./test/MRPTFactoryTest.t.sol -vvvvv --match-test testSepoliaDeploy",
     "deploy": "forge create --private-key YOUR-PRIVATE-KEY --rpc-url ${SEPOLIA_RPC_URL} --constructor-args $START_TIME_STAMP $ECOSYSTEM $MARKETING $STAKING_REWARD $TEAM $ADVISOR $LZPOINT --verify --etherscan-api-key YOUR-ETHERSCAN-API-KEY src/MRPTToken.sol:MRPTToken",
-    "deployToSepolia": "git add . && git commit -m 'Test' && git push --all && forge script script/MRPTDeploy.s.sol:MRPTDeploy --broadcast --verify src/MRPTToken.sol:MRPTToken --rpc-url sepolia --etherscan-api-key sepolia -vv",
+    "deployToSepolia": "forge script script/MRPTDeploy.s.sol:MRPTDeploy --broadcast --verify src/MRPTToken.sol:MRPTToken --rpc-url sepolia --etherscan-api-key sepolia -vv",
     "deployToEthereum": "forge script script/MRPTDeploy.s.sol:MRPTDeploy --broadcast --verify src/MRPTToken.sol:MRPTToken --rpc-url ethereum --etherscan-api-key ethereum -vv",
     "deployToMumbai": "forge script script/MRPTDeploy.s.sol:MRPTDeploy --broadcast --verify src/MRPTToken.sol:MRPTToken --rpc-url mumbai --etherscan-api-key mumbai -vv",
     "deployToBSC": "forge script script/MRPTDeploy.s.sol:MRPTDeploy --broadcast --verify src/MRPTToken.sol:MRPTToken --rpc-url bsc --etherscan-api-key bsc -vv",
