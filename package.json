@@ -22,5 +22,13 @@
     "deployToBSC": "forge script script/MRPTDeploy.s.sol:MRPTDeploy --broadcast --verify src/MRPTToken.sol:MRPTToken --rpc-url bsc --etherscan-api-key bsc -vv",
     "git": "git add . && git commit -m 'Test' && git push --all"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@openzeppelin/contracts": "5.0.0",
+    "@uniswap/v2-periphery": "*",
+    "@uniswap/v3-periphery": "*",
+    "cross-env": "^7.0.3",
+    "cross-var": "^1.1.0",
+    "dotenv-cli": "^7.3.0",
+    "i": "^0.3.7"
+  }
 }
