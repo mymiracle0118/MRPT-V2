@@ -24,93 +24,25 @@ contract MRPTToken is IMRPTToken, Ownable, ERC20, WormholeAdapter, LayerZeroAdap
     uint256 constant DEFAULT_GAS_LIMIT = 500_000;
     uint256 public constant MAX_SUPPLY = 900e24;
 
-    uint64 public constant ECOSYSTEM_VESTING_DURATION = 20 * 30 days;
-    uint64 public constant ECOSYSTEM_VESTING_DELAY = 9 * 30 days;
-    uint64 public constant ECOSYSTEM_PERCENT = 2000;
-
-    uint64 public constant MARTKETING_VESTING_DURATION = 20 * 30 days;
-    uint64 public constant MARKETING_VESTING_DELAY = 5 * 30 days;
-    uint64 public constant MARKETING_PERCENT = 1800;
-
-    uint64 public constant STAKING_VESTING_DURATION = 60 * 30 days;
-    uint64 public constant STAKING_VESTING_DELAY = 0;
-    uint64 public constant STAKING_PERCENT = 2100;
-
-    uint64 public constant TEAM_VESTING_DURATION = 20 * 30 days;
-    uint64 public constant TEAM_VESTING_DELAY = 12 * 30 days;
-    uint64 public constant TEAM_PERCENT = 1000;
-
-    uint64 public constant ADVISOR_VESTING_DURATION = 20 * 30 days;
-    uint64 public constant ADVISOR_VESTING_DELAY = 10 * 30 days;
-    uint64 public constant ADVISOR_PERCENT = 500;
-
-    address public FEE_RECEIVER;
-    uint256 public TRANSFER_FEE;
-    // uint256 public mintable;
+    // address public FEE_RECEIVER;
+    // uint256 public TRANSFER_FEE;
+    uint256 public mintable;
 
     event VestingStarted(address beneficiaryAddress, address vestingWallet);
 
-    constructor(
-        uint64 startVestingTimestamp,
-        address ecoSystem,
-        address marketing,
-        address stakingRewards,
-        address team,
-        address advisors
-    )
-        Ownable()
-        ERC20("Marpto", "MRPT")
-    {
-        // mintable = MAX_SUPPLY;
-
-        // Ecosystem - 20% 9 months cliff and 5% monthly for 20 months
-        _startVesting(
-            ecoSystem, startVestingTimestamp, ECOSYSTEM_VESTING_DELAY, ECOSYSTEM_VESTING_DURATION, ECOSYSTEM_PERCENT
-        );
-
-        // Marketing - 18% 5 months cliff and 5% monthly for 20 months
-        _startVesting(
-            marketing, startVestingTimestamp, MARKETING_VESTING_DELAY, MARTKETING_VESTING_DURATION, MARKETING_PERCENT
-        );
-
-        // Staking Rewards - 21% Linear vesting for 60 Months
-        _startVesting(
-            stakingRewards, startVestingTimestamp, STAKING_VESTING_DELAY, STAKING_VESTING_DURATION, STAKING_PERCENT
-        );
-
-        // Team - 10% 12 months Cliff 5% monthly for 20 Months
-        _startVesting(team, startVestingTimestamp, TEAM_VESTING_DELAY, TEAM_VESTING_DURATION, TEAM_PERCENT);
-
-        // Advisors - 5% 10 Months cliff and 5% monthly for 20 months
-        _startVesting(advisors, startVestingTimestamp, ADVISOR_VESTING_DELAY, ADVISOR_VESTING_DURATION, ADVISOR_PERCENT);
+    constructor() Ownable() ERC20("Marpto", "MRPT") {
+        mintable = MAX_SUPPLY;
     }
 
-    function _startVesting(
-        address beneficiaryAddress,
-        uint64 startVestingTimestamp,
-        uint64 cliffSeconds,
-        uint64 durationSeconds,
-        uint64 proportion
-    )
-        internal
-    {
-        address vestingWallet =
-            address(new VestingWallet(beneficiaryAddress, startVestingTimestamp + cliffSeconds, durationSeconds));
-        uint256 amount = MAX_SUPPLY * proportion / 10_000;
-        // mintable -= amount;
-        _mint(vestingWallet, amount);
-        emit VestingStarted(beneficiaryAddress, vestingWallet);
+    function mint(address account, uint256 amount) external onlyOwner {
+        mintable -= amount;
+        _mint(account, amount);
     }
 
-    // function mint(address account, uint256 amount) external onlyOwner {
-    //     mintable -= amount;
-    //     _mint(account, amount);
+    // function setFeeOption(address feeReceiver, uint256 amount) external onlyOwner {
+    //     FEE_RECEIVER = feeReceiver;
+    //     TRANSFER_FEE = amount;
     // }
-
-    function setFeeOption(address feeReceiver, uint256 amount) external onlyOwner {
-        FEE_RECEIVER = feeReceiver;
-        TRANSFER_FEE = amount;
-    }
 
     /// @inheritdoc IMRPTToken
     function transferFrom(
@@ -125,10 +57,11 @@ contract MRPTToken is IMRPTToken, Ownable, ERC20, WormholeAdapter, LayerZeroAdap
         override
     {
         // Get fee before transfer
-        uint256 feeAmount = value * TRANSFER_FEE / 1000;
-        super.transferFrom(_msgSender(), FEE_RECEIVER, feeAmount);
+        // uint256 feeAmount = value * TRANSFER_FEE / 1000;
+        // super.transferFrom(_msgSender(), FEE_RECEIVER, feeAmount);
 
-        _remoteTransfer(dstChainId, from, to, value - feeAmount, params);
+        // _remoteTransfer(dstChainId, from, to, value - feeAmount, params);
+        _remoteTransfer(dstChainId, from, to, value, params);
     }
 
     /// @inheritdoc IMRPTToken
@@ -146,8 +79,8 @@ contract MRPTToken is IMRPTToken, Ownable, ERC20, WormholeAdapter, LayerZeroAdap
         override
     {
         // Get fee before transfer
-        uint256 feeAmount = value * TRANSFER_FEE / 1000;
-        super.transferFrom(_msgSender(), FEE_RECEIVER, feeAmount);
+        // uint256 feeAmount = value * TRANSFER_FEE / 1000;
+        // super.transferFrom(_msgSender(), FEE_RECEIVER, feeAmount);
 
         _remoteTransferWithCallback(dstChainId, from, to, value, gasForCallback, payload, params);
     }
