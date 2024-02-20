@@ -19,7 +19,8 @@
     "deployToSepolia": "forge script script/MRPTDeploy.s.sol:MRPTDeploy --broadcast --verify src/MRPTToken.sol:MRPTToken --rpc-url sepolia --etherscan-api-key sepolia -vv",
     "deployToEthereum": "forge script script/MRPTDeploy.s.sol:MRPTDeploy --broadcast --verify src/MRPTToken.sol:MRPTToken --rpc-url ethereum --etherscan-api-key ethereum -vv",
     "deployToMumbai": "forge script script/MRPTDeploy.s.sol:MRPTDeploy --broadcast --verify src/MRPTToken.sol:MRPTToken --rpc-url mumbai --etherscan-api-key mumbai -vv",
-    "deployToBSC": "forge script script/MRPTDeploy.s.sol:MRPTDeploy --broadcast --verify src/MRPTToken.sol:MRPTToken --rpc-url bsc --etherscan-api-key bsc -vv"
+    "deployToBSC": "forge script script/MRPTDeploy.s.sol:MRPTDeploy --broadcast --verify src/MRPTToken.sol:MRPTToken --rpc-url bsc --etherscan-api-key bsc -vv",
+    "git": "git add . && git commit -m 'Test' && git push --all"
   },
   "devDependencies": {}
 }
